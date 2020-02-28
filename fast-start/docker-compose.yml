@@ -1,0 +1,51 @@
+services:
+    backend:
+      image: 'project/server:latest'
+      container_name: backend
+      hostname: backend
+      restart: always
+      expose:
+        - "8070"
+      ports:
+         - "8070:8070"
+      volumes:
+        - data/server:/data/logs
+      environment:
+        - "SPRING_PROFILES_ACTIVE=prod"            
+        - SERVER_PORT=8070
+        - POSTGRES_URI=jdbc:postgresql://db:5432/testdb
+        - POSTGRES_USERNAME=test
+        - POSTGRES_PASSWORD=test
+        - STORAGE_URI=http://minio:9000
+        - STORAGE_ACCESS_KEY=asdasd
+        - STORAGE_SECRET_KEY=dsgdfgdfgdfgdfgdfgdfgdfhf
+        - STORAGE_DEFAULT_BUCKET=minio
+        - ACCESS_KEY=mySecret
+      depends_on:
+        - db
+
+    db:
+        image: postgres:11-alpine
+        environment:
+            POSTGRES_USER: test
+            POSTGRES_PASSWORD: test
+            POSTGRES_DB: testdb
+        ports:
+            - 5432:5432
+        volumes:
+            - data/postgresql:/var/lib/postgresql/data
+        container_name: database-1
+
+    minio:
+        container_name: minio-1
+        restart: always
+        hostname : minio
+        image: minio/minio
+        ports:
+            - "9000:9000"
+        volumes:
+            - data/minio-1:/export
+        environment:
+            - "MINIO_ACCESS_KEY=asdasd"
+            - "MINIO_SECRET_KEY=dsgdfgdfgdfgdfgdfgdfgdfhf"
+        command: server /export
