@@ -21,13 +21,12 @@ import com.amazonaws.ClientConfiguration;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 
-
-
 import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Date;
+import java.util.Objects;
 
 @Service
 public class StorageService {
@@ -44,23 +43,25 @@ public class StorageService {
     @Value("${amazonProperties.secretKey}")
     private String secretKey;
 
-//    @PostConstruct
-//    private void initializeAmazon() {
-//        AWSCredentials credentials = new BasicAWSCredentials(this.accessKey, this.secretKey);
-//        ClientConfiguration clientConfiguration = new ClientConfiguration();
-//        clientConfiguration.setSignerOverride("AWSS3V4SignerType");
-//        clientConfiguration.withRetryPolicy(new RetryPolicy(PredefinedRetryPolicies.DEFAULT_RETRY_CONDITION,
-//                new PredefinedBackoffStrategies.ExponentialBackoffStrategy(5000, 20000),
-//                10, true));
-//
-//        this.s3client = AmazonS3ClientBuilder
-//                .standard()
-//                .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(this.endpointUrl, Regions.EU_WEST_3.getName()))
-//                .withPathStyleAccessEnabled(true)
-//                .withClientConfiguration(clientConfiguration)
-//                .withCredentials(new AWSStaticCredentialsProvider(credentials))
-//                .build();
-//    }
+    @PostConstruct
+    private void initializeAmazon() {
+        if(Objects.isNull(endpointUrl) || endpointUrl.isEmpty())
+            return;
+        AWSCredentials credentials = new BasicAWSCredentials(this.accessKey, this.secretKey);
+        ClientConfiguration clientConfiguration = new ClientConfiguration();
+        clientConfiguration.setSignerOverride("AWSS3V4SignerType");
+        clientConfiguration.withRetryPolicy(new RetryPolicy(PredefinedRetryPolicies.DEFAULT_RETRY_CONDITION,
+                new PredefinedBackoffStrategies.ExponentialBackoffStrategy(5000, 20000),
+                10, true));
+
+        this.s3client = AmazonS3ClientBuilder
+                .standard()
+                .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(this.endpointUrl, Regions.EU_WEST_3.getName()))
+                .withPathStyleAccessEnabled(true)
+                .withClientConfiguration(clientConfiguration)
+                .withCredentials(new AWSStaticCredentialsProvider(credentials))
+                .build();
+    }
 
     public String uploadFile(MultipartFile multipartFile) {
         String fileUrl = "";

@@ -2,9 +2,26 @@
 
 ![alt text](https://www.startus.cc/sites/default/files/styles/company_profile_cover/public/logo_1_rand2000x.png?itok=QKPdHi01 "Jiratech Logo")
 
+## Fast Start
+1. Install docker and docker-compose 
+~~~~
+cd fast-start
+chmod u+x docker-compose-ubuntu.sh
+./docker-compose-ubuntu.sh
+~~~~
+2. Build server image in root
+~~~~
+mvn clean install dockerfile:build
+~~~~
+3. Run docker compose (this will start the server with a postgres database and a minio storage)
+~~~~
+cd fast-start
+docker-compose up -d
+~~~~
+
 
 ## Setup
-1. Add your configuration to application-dev.yml
+1. Add your configuration to application-dev.yml 
 2. For minio setup uncomment initializeAmazon() function from com.project.server.business.StorageService
 3. Start local server with: clean spring-boot:run -Dspring-boot.run.profiles=dev
 
@@ -33,7 +50,7 @@ For user model and enpoints use the following generator:
 ~~~~
 
 
-In adition the boilerpalte provide the automatic generation of DeepVISS (https://deepviss.org/)
+In adition the boilerpalte provides the automatic generation of DeepVISS (https://deepviss.org/)
 https://github.com/deepviss-org
 
 ![alt text](https://avatars1.githubusercontent.com/u/51749880?s=200&v=4 "DeepVISS Logo")
@@ -63,6 +80,6 @@ docker run --name project -d \
     project/server 
 ~~~~
 
-SENTRY_DSN is used for monitoring and erro tracking (sentry.io)
+SENTRY_DSN is used for monitoring and error tracking (sentry.io)
 
 
