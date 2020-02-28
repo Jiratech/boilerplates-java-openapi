@@ -1,6 +1,14 @@
 # Java boilerplate with login using OpenApi v3
 
 ![alt text](https://www.startus.cc/sites/default/files/styles/company_profile_cover/public/logo_1_rand2000x.png?itok=QKPdHi01 "Jiratech Logo")
+## Description
+Simple boilerplate for building dockerized spring rest server with open api, postgres database and minio/aws s3 storage.
+Features: 
+    1. automatic creation of user table
+    2. automatic creation of endpoints and DTOs for login and register
+    3. Swagger on http://localhost:8070/swagger-ui.html#/
+    4. integration with logback for elk stack
+
 
 ## Fast Start
 1. Install docker and docker-compose 
