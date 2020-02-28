@@ -1,0 +1,158 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "description": "Template for openapi",
+    "version": "1.0.0",
+    "title": "Template",
+    "contact": {
+      "email": "office@mail.com"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "tags": [
+    {
+      "name": "authentication",
+      "description": "Endpoint for authentication related requests"
+    }
+  ],
+  "paths": {
+    "/authentication/login": {
+      "post": {
+        "tags": [
+          "user"
+        ],
+        "summary": "authenticate",
+        "description": "",
+        "operationId": "login",
+        "parameters": [],
+        "requestBody": {
+          "description": "Authentication request",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/JwtAuthenticationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/JwtAuthenticationResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid status value"
+          }
+        }
+      }
+    },
+    "/authentication/register": {
+      "post": {
+        "tags": [
+          "authentication"
+        ],
+        "summary": "register",
+        "description": "",
+        "operationId": "register",
+        "parameters": [],
+        "requestBody": {
+          "description": "The user object to be created",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          },
+          "400": {
+            "description": "Invalid status value"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "User": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "string",
+            "description": "user unique uuid",
+            "example": "a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11"
+          },
+          "email": {
+            "type": "string",
+            "description": "email for current user",
+            "example": "user@gmail.com"
+          },
+          "username": {
+            "type": "string",
+            "description": "Username",
+            "example": "example3"
+          },
+          "password": {
+            "type": "string",
+            "description": "password",
+            "example": "example!3"
+          },
+          "role": {
+            "type": "string",
+            "description": "role for current user",
+            "example": "ROLE_EXAMPLE"
+          },
+          "creationTimestamp": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Date and time expressed according to ISO 8601 (e.g. 2018-06-24T23:10:28+03:00)"
+          },
+          "lastUpdateTimestamp": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Date and time expressed according to ISO 8601 (e.g. 2018-06-24T23:10:28+03:00)"
+          }
+        }
+      },
+      "JwtAuthenticationRequest": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string",
+            "description": "email for current user",
+            "example": "user@gmail.com"
+          },
+          "password": {
+            "type": "string",
+            "description": "password",
+            "example": "example!3"
+          }
+        }
+      },
+      "JwtAuthenticationResponse": {
+        "type": "object",
+        "properties": {
+          "accessToken": {
+            "type": "string",
+            "description": "access token"
+          }
+        }
+      }
+    }
+  }
+}

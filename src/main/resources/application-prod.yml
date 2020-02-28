@@ -1,0 +1,32 @@
+server:
+  port: ${SERVER_PORT}
+  tomcat:
+    max-threads: 4
+
+spring:
+  datasource:
+    url: ${POSTGRES_URI}
+    username: ${POSTGRES_USERNAME}
+    password: ${POSTGRES_PASSWORD}
+    driverClassName: org.postgresql.Driver
+    platform: prod
+    initialization-mode: always
+  jpa:
+    hibernate:
+      ddl-auto: update
+      temp:
+        use_jdbc_metadata_defaults: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+security:
+  accessKey: ${ACCESS_KEY}
+
+#Minio
+amazonProperties:
+  endpointUrl: ${STORAGE_URI}
+  accessKey: ${STORAGE_ACCESS_KEY}
+  secretKey: ${STORAGE_SECRET_KEY}
+  bucketName: ${STORAGE_DEFAULT_BUCKET}
+

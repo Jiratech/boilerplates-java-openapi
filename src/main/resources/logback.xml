@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <Pattern>
+                %d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n
+            </Pattern>
+        </layout>
+    </appender>
+
+    <appender name="FILE-AUDIT"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_HOME}/project.log</file>
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder"/>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- rollover daily or over 10MB -->
+            <fileNamePattern>${LOG_HOME}/archived/project.%d{yyyy-MM-dd}.%i.log
+            </fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy
+                    class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>100MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+    </appender>
+
+    <!--<appender name="STASH" class="net.logstash.logback.appender.LogstashTcpSocketAppender">-->
+    <!--<destination>YOUR-IP:PORT</destination>-->
+    <!--<encoder class="net.logstash.logback.encoder.LogstashEncoder" />-->
+    <!--<keepAliveDuration>5 minutes</keepAliveDuration>-->
+    <!--</appender>-->
+
+    <!-- Send logs to both console and file audit -->
+    <logger name="com.envisage.api" level="debug"
+            additivity="false">
+        <appender-ref ref="FILE-AUDIT"/>
+        <appender-ref ref="STDOUT"/>
+        <!--<appender-ref ref="STASH"/>-->
+    </logger>
+
+    <root level="info" additivity="false">
+        <appender-ref ref="FILE-AUDIT"/>
+        <appender-ref ref="STDOUT"/>
+        <!--<appender-ref ref="STASH"/>-->
+    </root>
+
+</configuration>

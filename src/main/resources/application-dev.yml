@@ -1,0 +1,32 @@
+server:
+  port: 8070
+  tomcat:
+    max-threads: 4
+
+spring:
+  datasource:
+    url: jdbc:postgresql://databaseurl:port/database
+    username: username
+    password: password
+    driverClassName: org.postgresql.Driver
+    platform: dev
+    initialization-mode: always
+  jpa:
+    hibernate:
+      ddl-auto: update
+      temp:
+        use_jdbc_metadata_defaults: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+security:
+  accessKey: mySecret
+
+#Minio
+amazonProperties:
+  endpointUrl:
+  accessKey:
+  secretKey:
+  bucketName:
+
