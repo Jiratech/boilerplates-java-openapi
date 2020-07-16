@@ -8,7 +8,7 @@ Simple boilerplate for building dockerized spring rest server with open api and 
 
 Features: 
 1. automatic creation of user table
-2. automatic creation of endpoints and DTOs based on open-api schema ()
+2. automatic creation of endpoints and DTOs based on open-api schema
 3. Swagger on http://localhost:8070/swagger-ui.html#/
 4. integration with logback for elk stack
 
@@ -47,7 +47,7 @@ For user model and enpoints use the following generator:
         <goal>generate</goal>
     </goals>
     <configuration>
-        <inputSpec>${project.basedir}/src/main/resources/open-api/user-management.json</inputSpec>
+        <inputSpec>https://raw.githubusercontent.com/Jiratech/boilerplate-openapi-schema/master/schema.json</inputSpec>
         <generatorName>spring</generatorName>
         <modelPackage>openapi.project.model</modelPackage>
         <apiPackage>openapi.project.api</apiPackage>
