@@ -1,7 +1,8 @@
 package com.project.server.rest;
 
 import com.project.server.business.UserService;
-import com.project.server.business.security.JwtTokenUtil;
+import com.project.server.business.security.AccessTokenUtil;
+import com.project.server.business.security.RefreshTokenUtil;
 import com.project.server.rest.exceptions.validators.UserValidator;
 import openapi.project.api.AuthenticationApi;
 import openapi.project.model.JwtAuthenticationRequest;
@@ -13,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.NativeWebRequest;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.Optional;
 
@@ -40,37 +41,46 @@ public class AuthenticationController implements AuthenticationApi {
     private UserService userService;
 
     @Autowired
-    private JwtTokenUtil jwtTokenUtil;
+    private AccessTokenUtil accessTokenUtil;
+
+    @Autowired
+    private RefreshTokenUtil refreshTokenUtil;
+
+    private final HttpServletRequest request;
+
+    @Autowired
+    public AuthenticationController(HttpServletRequest request) {
+        this.request = request;
+    }
 
     @InitBinder("user")
     protected void initBinderForUser(WebDataBinder binder) {
         binder.addValidators(new UserValidator());
     }
 
-
     @Override
     public Optional<NativeWebRequest> getRequest() {
         return Optional.empty();
     }
 
+
     @Override
     public ResponseEntity<JwtAuthenticationResponse> login(@Valid JwtAuthenticationRequest jwtAuthenticationRequest) {
         UsernamePasswordAuthenticationToken user = new UsernamePasswordAuthenticationToken(
-                jwtAuthenticationRequest.getUsername(),
+                jwtAuthenticationRequest.getEmail(),
                 jwtAuthenticationRequest.getPassword()
         );
-        try {
-            final Authentication authentication = authenticationManager.authenticate(user);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-        }
-        catch (BadCredentialsException e) {
-            throw e;
-        }
+
+        final Authentication authentication = authenticationManager.authenticate(user);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
         // Reload password post-security so we can generate token
-        final String token = jwtTokenUtil.generateToken(user.getName());
+        final String accessToken = accessTokenUtil.generateToken(user.getName());
+        final String refreshToken = refreshTokenUtil.generateToken(user.getName());
 
         JwtAuthenticationResponse jwtAuthenticationResponse = new JwtAuthenticationResponse();
-        jwtAuthenticationResponse.setAccessToken(token);
+        jwtAuthenticationResponse.setAccessToken(accessToken);
+        jwtAuthenticationResponse.setRefreshToken(refreshToken);
 
         logger.info("User {} has logged in", user.getName());
         return ResponseEntity.ok(jwtAuthenticationResponse);
@@ -78,7 +88,7 @@ public class AuthenticationController implements AuthenticationApi {
     }
 
     @Override
-    public ResponseEntity<Void> register(@Valid User user) {
+    public ResponseEntity<User> register(@Valid User user) {
         userService.saveUser(user);
         logger.info("User {} has registered", user.getEmail());
         return new ResponseEntity<>(HttpStatus.OK);

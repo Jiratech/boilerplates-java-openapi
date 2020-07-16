@@ -22,11 +22,6 @@ spring:
 
 security:
   accessKey: ${ACCESS_KEY}
+  refreshKey: ${REFRESH_KEY}
 
-#Minio
-amazonProperties:
-  endpointUrl: ${STORAGE_URI}
-  accessKey: ${STORAGE_ACCESS_KEY}
-  secretKey: ${STORAGE_SECRET_KEY}
-  bucketName: ${STORAGE_DEFAULT_BUCKET}
 

@@ -5,9 +5,9 @@ server:
 
 spring:
   datasource:
-    url: jdbc:postgresql://databaseurl:port/database
-    username: username
-    password: password
+    url: jdbc:postgresql://192.168.100.124:5434/test
+    username: jiratech
+    password: jiratech
     driverClassName: org.postgresql.Driver
     platform: dev
     initialization-mode: always
@@ -19,14 +19,9 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
 
 security:
   accessKey: mySecret
-
-#Minio
-amazonProperties:
-  endpointUrl:
-  accessKey:
-  secretKey:
-  bucketName:
+  refreshKey: mySecret
 

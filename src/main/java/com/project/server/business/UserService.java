@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 public class UserService implements UserDetailsService {
-	private static final Logger logger = LoggerFactory.getLogger(StorageService.class);
+	private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
 	private final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
@@ -66,7 +66,6 @@ public class UserService implements UserDetailsService {
 		userDao.setEmail(user.getEmail());
 		userDao.setUsername(user.getUsername());
 		userDao.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-		userDao.setRole(user.getRole());
 		userDao.setCreationTimestamp(new Date());
 		userDao.setLastUpdateTimestamp(new Date());
 

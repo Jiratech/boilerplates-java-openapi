@@ -1,13 +1,16 @@
 # Java boilerplate with login using OpenApi v3
 
 ![alt text](https://www.startus.cc/sites/default/files/styles/company_profile_cover/public/logo_1_rand2000x.png?itok=QKPdHi01 "Jiratech Logo")
+
 ## Description
-Simple boilerplate for building dockerized spring rest server with open api, postgres database and minio/aws s3 storage.
+
+Simple boilerplate for building dockerized spring rest server with open api and postgres database.
+
 Features: 
-    1. automatic creation of user table
-    2. automatic creation of endpoints and DTOs for login and register
-    3. Swagger on http://localhost:8070/swagger-ui.html#/
-    4. integration with logback for elk stack
+1. automatic creation of user table
+2. automatic creation of endpoints and DTOs based on open-api schema ()
+3. Swagger on http://localhost:8070/swagger-ui.html#/
+4. integration with logback for elk stack
 
 
 ## Fast Start
@@ -21,7 +24,7 @@ chmod u+x docker-compose-ubuntu.sh
 ~~~~
 mvn clean install dockerfile:build
 ~~~~
-3. Run docker compose (this will start the server with a postgres database and a minio storage)
+3. Run docker compose (this will start the server with a postgres database)
 ~~~~
 cd fast-start
 docker-compose up -d
@@ -30,8 +33,7 @@ docker-compose up -d
 
 ## Setup
 1. Add your configuration to application-dev.yml 
-2. For minio setup uncomment initializeAmazon() function from com.project.server.business.StorageService
-3. Start local server with: clean spring-boot:run -Dspring-boot.run.profiles=dev
+2. Start local server with: clean spring-boot:run -Dspring-boot.run.profiles=dev
 
 
 ## OpenApi
@@ -57,7 +59,6 @@ For user model and enpoints use the following generator:
 </execution>
 ~~~~
 
-
 In adition the boilerpalte provides the automatic generation of DeepVISS (https://deepviss.org/)
 https://github.com/deepviss-org
 
@@ -78,10 +79,6 @@ docker run --name project -d \
     -e POSTGRES_URI=postgres_uri \
     -e POSTGRES_USERNAME=username \
     -e POSTGRES_PASSWORD=password \
-    -e STORAGE_URI=storage_uri \
-    -e STORAGE_ACCESS_KEY=storage_access \
-    -e STORAGE_SECRET_KEY=storage_secret \
-    -e STORAGE_DEFAULT_BUCKET=bucket \
     -e ACCESS_KEY=jwt_secret \
     -e LOG_HOME=/data/logs \
     -p desired_port:server_port
